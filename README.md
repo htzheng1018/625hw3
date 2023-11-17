@@ -4,6 +4,10 @@
 # mlrmodel
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/htzheng1018/625hw3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/htzheng1018/625hw3?branch=main)
+[![R-CMD-check](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of mypackage is to fit a multiple linear regression using
@@ -67,29 +71,29 @@ call our function
 ``` r
 lrm(y, x)
 #> $mean_x
-#> [1] 0.001095871
+#> [1] -0.1714946
 #> 
 #> $smry
-#>                        beta       partial sse       se beta_hat
-#> intercept    4.280605218811 -622.572618634865 0.150028969207522
-#> x1         2.96514432375021  316.750385042125 0.170525770168378
-#> x2         2.14367567529067  117.265166292354 0.171367735428449
-#> x3        -1.69889984281764  136.793349663655 0.154088099245864
-#>                     t value      p value significance
-#> intercept  28.5318578233382 0.000000e+00          ***
-#> x1         17.3882476579487 0.000000e+00          ***
-#> x2         12.5092140007051 2.220446e-16             
-#> x3        -11.0255097644294 1.665335e-14             
+#>                       beta       partial sse       se beta_hat          t value
+#> intercept 3.93124147978536 -788.687978357865 0.142656568163142 27.5573815521035
+#> x1        3.18340502150309  460.894412591189 0.190495910516939 16.7111462543445
+#> x2        1.88353710451697  195.046077230162  0.13704930389979 13.7434999735147
+#> x3        -1.5250215000774  95.8810734646578 0.139426736144106 -10.937798174528
+#>                p value significance
+#> intercept 0.000000e+00          ***
+#> x1        0.000000e+00          ***
+#> x2        0.000000e+00          ***
+#> x3        2.176037e-14             
 #> 
 #> $corr_table
-#>             x1         x2          x3
-#> x1  1.00000000 -0.1122868 -0.06336296
-#> x2 -0.11228679  1.0000000  0.23967993
-#> x3 -0.06336296  0.2396799  1.00000000
+#>            x1         x2         x3
+#> x1  1.0000000  0.2344004 -0.2608428
+#> x2  0.2344004  1.0000000 -0.2047026
+#> x3 -0.2608428 -0.2047026  1.0000000
 #> 
 #> $R_square
-#>           [,1]
-#> [1,] 0.9168551
+#>          [,1]
+#> [1,] 0.953256
 ```
 
 Compare with the original function lm().
@@ -102,22 +106,22 @@ lm(y ~ x1 + x2 + x3)
 #> 
 #> Coefficients:
 #> (Intercept)           x1           x2           x3  
-#>       4.281        2.965        2.144       -1.699
+#>       3.931        3.183        1.884       -1.525
 ```
 
 use Rcpp to calculate mean
 
 ``` r
 lrm(y, x, Rcpp = T)
-#> [1] -0.007595435  0.006819126  0.004063922
+#> [1] -0.30070085 -0.05100168 -0.16278112
 ```
 
 Compare with the original function.
 
 ``` r
 colMeans(x)
-#>           x1           x2           x3 
-#> -0.007595435  0.006819126  0.004063922
+#>          x1          x2          x3 
+#> -0.30070085 -0.05100168 -0.16278112
 ```
 
 We use benchmarks to test the efficiency of our new function.
@@ -133,8 +137,8 @@ summary(effct_func)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 myfunc        944µs   1.01ms      945.     463KB     10.7
-#> 2 lmfunc        750µs 796.51µs     1244.     124KB     15.1
+#> 1 myfunc        938µs      1ms      950.     463KB     10.7
+#> 2 lmfunc        738µs    782µs     1261.     124KB     15.0
 ```
 
 We use benchmarks to test the efficiency of our Rcpp.
@@ -149,6 +153,6 @@ summary(effct_func_new)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 rcppfunc    21.69µs  24.25µs    39318.    10.6KB     15.7
-#> 2 orginfunc    4.68µs   5.28µs   175535.        0B     17.6
+#> 1 rcppfunc    21.71µs   24.1µs    39756.    10.6KB     15.9
+#> 2 orginfunc    4.67µs    5.2µs   184318.        0B     36.9
 ```

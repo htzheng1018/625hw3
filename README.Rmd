@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # mlrmodel
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/htzheng1018/625hw3/branch/main/graph/badge.svg)](https://app.codecov.io/gh/htzheng1018/625hw3?branch=main)
+[![R-CMD-check](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of mypackage is to fit a multiple linear regression using matrix calculations. It contains a real dataset, which describes depression and its factots, and a virtual dataset, which is created by random variables. Using this model, we can estimate the coefficients of variables, partial SSE, se(beta_hat), t value, p value and significance of each variables.
