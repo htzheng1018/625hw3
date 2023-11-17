@@ -10,6 +10,7 @@
 #'@return the summary of linear regression model of x and y
 #'
 #'@examples
+#'data("mtcars")
 #'x = mtcars[,'hp']
 #'y = mtcars[,'mpg']
 #'lrm(y,x)

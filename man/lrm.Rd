@@ -19,6 +19,7 @@ It is more efficient.
 When there are NAN values, our model just simply remove the NAN value.
 }
 \examples{
+data("mtcars")
 x = mtcars[,'hp']
 y = mtcars[,'mpg']
 lrm(y,x)
