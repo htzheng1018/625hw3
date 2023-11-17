@@ -75,25 +75,3 @@ test_that("mlrmodel works", {
                check.attributes = FALSE)
 })
 ```
-
-We use benchmarks to test the efficiency of our new function.
-```{r}
-library(bench)
-effct_func <- bench::mark(myfunc = {
-  beta_my <- as.vector(round(as.numeric(lrm(y, x)$smry[, "beta"]), 3))
-}, lmfunc = {
-   beta_lm <- as.vector(round(summary(lm(y ~ x1 + x2 + x3))$coefficients[, "Estimate"], 3))
-})
-summary(effct_func)
-```
-
-We use benchmarks to test the efficiency of our Rcpp.
-```{r}
-effct_func_new <- bench::mark(rcppfunc = {
-  mean_my <- as.vector(round(as.numeric(lrm(y, x, Rcpp = T)), 3))
-}, orginfunc = {
-   mean_og <- as.vector(round(colMeans(x), 3))
-})
-summary(effct_func_new)
-```
-
