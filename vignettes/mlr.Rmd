@@ -14,6 +14,86 @@ knitr::opts_chunk$set(
 )
 ```
 
+We have to download this package from the github and get the vignettes. Simutaneously, we can use the library to call the function.
 ```{r setup}
 library(mlrmodel)
 ```
+
+(1) Part I
+First, we use the virtual data to fit a multiple linear regression model. We have to create a data by ourselves.
+```{r}
+n = 50
+x1 = rnorm(n)
+x2 = rnorm(n)
+x3 = rnorm(n)
+x = cbind(x1, x2, x3)
+y = 4 + 3 * x1 + 2 * x2 - 1.5 * x3 + rnorm(n)
+```
+
+Then we fit a multiple regression model and get the coefficients of each variables.
+```{r}
+md1 = lrm(y, x)
+print(md1$smry[, "beta"])
+```
+
+We get the partial SSE for each varibles.
+```{r}
+print(md1$smry[, "partial sse"])
+```
+
+We get the se(beta_hat).
+```{r}
+print(md1$smry[, "se beta_hat"])
+```
+
+We get the t-value for each varibles.
+```{r}
+print(md1$smry[, "t value"])
+```
+
+We get the p-value for each varibles and see whether they are significant.
+```{r}
+print(md1$smry[, "p value"])
+```
+
+We use Rcpp to estimate the mean of x variables.
+```{r}
+lrm(y, x, Rcpp = T)
+```
+
+Test our function with original R functions.
+```{r}
+library(testthat)
+# beta
+test_that("mlrmodel works", {
+  expect_equal(round(as.numeric(lrm(y, x)$smry[, "beta"]), 3), round(summary(lm(y ~ x1 + x2 + x3))$coefficients[, "Estimate"], 3),
+               check.attributes = FALSE)
+})
+# Rcpp
+test_that("mlrmodel works", {
+  expect_equal(round(as.numeric(lrm(y, x, Rcpp = T)), 3), round(colMeans(x), 3),
+               check.attributes = FALSE)
+})
+```
+
+We use benchmarks to test the efficiency of our new function.
+```{r}
+library(bench)
+effct_func <- bench::mark(myfunc = {
+  beta_my <- as.vector(round(as.numeric(lrm(y, x)$smry[, "beta"]), 3))
+}, lmfunc = {
+   beta_lm <- as.vector(round(summary(lm(y ~ x1 + x2 + x3))$coefficients[, "Estimate"], 3))
+})
+summary(effct_func)
+```
+
+We use benchmarks to test the efficiency of our Rcpp.
+```{r}
+effct_func_new <- bench::mark(rcppfunc = {
+  mean_my <- as.vector(round(as.numeric(lrm(y, x, Rcpp = T)), 3))
+}, orginfunc = {
+   mean_og <- as.vector(round(colMeans(x), 3))
+})
+summary(effct_func_new)
+```
+

@@ -1,0 +1,101 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# mlrmodel
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of mypackage is to fit a multiple linear regression using matrix calculations. It contains a real dataset, which describes depression and its factots, and a virtual dataset, which is created by random variables. Using this model, we can estimate the coefficients of variables, partial SSE, se(beta_hat), t value, p value and significance of each variables.
+
+Compare with the traditional lm() function, the lrm() function can remains the same effect. Meanwhile, the Rcpp file can also have the same effect with the original R function.
+
+
+## Installation
+
+You can install the development version of mypackage and vignettes from github with devtools:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("htzheng1018/625hw3", build_vignettes = T)
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(mlrmodel)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+This is a basic example which shows you how to solve a common problem:
+```{r}
+n = 50
+x1 = rnorm(n)
+x2 = rnorm(n)
+x3 = rnorm(n)
+x = cbind(x1, x2, x3)
+missing_positions = sample(1: 200, 30) 
+y = 4 + 3 * x1 + 2 * x2 - 1.5 * x3 + rnorm(n)
+```
+
+call our function
+```{r}
+lrm(y, x)
+```
+
+Compare with the original function lm().
+```{r}
+lm(y ~ x1 + x2 + x3)
+```
+
+use Rcpp to calculate mean
+```{r}
+lrm(y, x, Rcpp = T)
+```
+
+Compare with the original function.
+```{r}
+colMeans(x)
+```
+
+We use benchmarks to test the efficiency of our new function.
+```{r}
+library(bench)
+effct_func <- bench::mark(myfunc = {
+  beta_my <- as.vector(round(as.numeric(lrm(y, x)$smry[, "beta"]), 3))
+}, lmfunc = {
+   beta_lm <- as.vector(round(summary(lm(y ~ x1 + x2 + x3))$coefficients[, "Estimate"], 3))
+})
+summary(effct_func)
+```
+
+We use benchmarks to test the efficiency of our Rcpp.
+```{r}
+effct_func_new <- bench::mark(rcppfunc = {
+  mean_my <- as.vector(round(as.numeric(lrm(y, x, Rcpp = T)), 3))
+}, orginfunc = {
+   mean_og <- as.vector(round(colMeans(x), 3))
+})
+summary(effct_func_new)
+```
+

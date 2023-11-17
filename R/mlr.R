@@ -91,6 +91,7 @@ lrm = function(y, x, Rcpp = F) {
       return(result)
     }
   } else {
-    return(mean_rcpp(x))
+    # Use Rcpp function to calculate mean of x
+    return(colMeansRcpp(x))
   }
 }

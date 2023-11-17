@@ -1,1 +1,3 @@
 exportPattern("^[[:alpha:]]+")
+useDynLib(mlrmodel, .registration = TRUE)
+import(Rcpp)
