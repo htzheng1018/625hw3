@@ -51,6 +51,20 @@ test_that("linear regression model works", {
                round(summary(lm(y ~ x1 + x2 + x3))$r.square, 5), check.attributes = FALSE)
 })
 
+# If the rank of XtX is 0, the result should be 0
+test_that("linear regression model works", {
+  n = 50
+  x1 = rnorm(n)
+  x2 = rnorm(n)
+  x3 = rnorm(n)
+  x = matrix(0, n, 3)
+  colnames(x) = c("x1", "x2", "x3")
+  y = 4 + 3 * x1 + 2 * x2 - 1.5 * x3 + rnorm(n)
+  # result
+  expect_equal(lrm(y, x),
+               0, check.attributes = FALSE)
+})
+
 # Using Rcpp to calculate mean of x
 test_that("Rcpp works", {
   n = 50
