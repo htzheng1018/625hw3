@@ -59,7 +59,7 @@ x = cbind(x1, x2, x3)
 y = 4 + 3 * x1 + 2 * x2 - 1.5 * x3 + rnorm(n)
 ```
 
-call our function
+Call our function
 ```{r}
 lrm(y, x)
 ```

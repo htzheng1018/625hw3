@@ -66,34 +66,34 @@ x = cbind(x1, x2, x3)
 y = 4 + 3 * x1 + 2 * x2 - 1.5 * x3 + rnorm(n)
 ```
 
-call our function
+Call our function
 
 ``` r
 lrm(y, x)
 #> $mean_x
-#> [1] -0.1573282
+#> [1] -0.03980453
 #> 
 #> $smry
-#>                        beta      partial sse       se beta_hat
-#> intercept  4.13631739717443  -688.4384476697 0.136926322353665
-#> x1         3.22760089958289 395.024213875671 0.161098015709941
-#> x2         1.96424689106138 156.552529956613 0.143834178250059
-#> x3        -1.63612336674549 97.9812535596508  0.15196069758785
-#>                     t value     p value significance
-#> intercept  30.2083436265146 0.00000e+00          ***
-#> x1         20.0350133759202 0.00000e+00          ***
-#> x2         13.6563292185428 0.00000e+00          ***
-#> x3        -10.7667534613655 3.68594e-14             
+#>                        beta       partial sse       se beta_hat
+#> intercept  4.21549110137113 -753.019671033192 0.161369209213496
+#> x1         2.81579243039914  400.835124857333 0.155920062090442
+#> x2         1.99145439102231  219.118538569371 0.170996770563359
+#> x3        -1.36447773591242  76.1107527549014 0.174032928800899
+#>                     t value      p value significance
+#> intercept  26.1232680132547 0.000000e+00          ***
+#> x1         18.0592054200557 0.000000e+00          ***
+#> x2         11.6461520557455 2.664535e-15             
+#> x3        -7.84034231518014 5.089902e-10             
 #> 
 #> $corr_table
-#>              x1          x2           x3
-#> x1  1.000000000 0.005720326 -0.124269181
-#> x2  0.005720326 1.000000000  0.003613378
-#> x3 -0.124269181 0.003613378  1.000000000
+#>            x1          x2          x3
+#> x1 1.00000000  0.01436727  0.03125442
+#> x2 0.01436727  1.00000000 -0.18219815
+#> x3 0.03125442 -0.18219815  1.00000000
 #> 
 #> $R_square
 #>           [,1]
-#> [1,] 0.9435237
+#> [1,] 0.9243642
 ```
 
 Compare with the original function lm().
@@ -106,14 +106,14 @@ lm(y ~ x1 + x2 + x3)
 #> 
 #> Coefficients:
 #> (Intercept)           x1           x2           x3  
-#>       4.136        3.228        1.964       -1.636
+#>       4.215        2.816        1.991       -1.364
 ```
 
 use Rcpp to calculate mean
 
 ``` r
 lrm(y, x, Rcpp = T)
-#> [1] -0.1097702 -0.1953049 -0.1669094
+#> [1]  0.1109601 -0.1073051 -0.1230686
 ```
 
 Compare with the original function.
@@ -121,7 +121,7 @@ Compare with the original function.
 ``` r
 colMeans(x)
 #>         x1         x2         x3 
-#> -0.1097702 -0.1953049 -0.1669094
+#>  0.1109601 -0.1073051 -0.1230686
 ```
 
 We use benchmarks to test the efficiency of our new function.
@@ -137,8 +137,8 @@ summary(effct_func)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 myfunc        930µs    997µs      956.     463KB     10.7
-#> 2 lmfunc        745µs    785µs     1250.     124KB     15.1
+#> 1 myfunc        926µs      1ms      953.     463KB     10.6
+#> 2 lmfunc        741µs    775µs     1279.     124KB     15.0
 ```
 
 We use benchmarks to test the efficiency of our Rcpp.
@@ -153,6 +153,6 @@ summary(effct_func_new)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 rcppfunc    21.69µs  24.09µs    40605.    10.6KB     16.2
-#> 2 orginfunc    4.67µs   5.28µs   178251.        0B     35.7
+#> 1 rcppfunc    21.91µs  24.13µs    40818.    10.6KB     16.3
+#> 2 orginfunc    4.72µs   5.35µs   160926.        0B     32.2
 ```
