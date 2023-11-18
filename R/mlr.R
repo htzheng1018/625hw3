@@ -45,7 +45,7 @@ lrm = function(y, x, Rcpp = F) {
     colnames(x)[1] = "intercept"
 
     if (det(t(x) %*% x) == 0) {
-      return(0)
+      result = 0
     }
 
     else {
