@@ -1,7 +1,9 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Function to calculate column means of a NumericMatrix
+//' Function to calculate column means of a NumericMatrix
+//' @param x predictors matrix
+//' @return mean of x
 // [[Rcpp::export]]
 NumericVector colMeansRcpp(NumericMatrix x) {
   int numRows = x.nrow();
