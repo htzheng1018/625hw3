@@ -45,7 +45,6 @@ lrm = function(y, x, Rcpp = F) {
     colnames(x)[1] = "intercept"
 
     if (det(t(x) %*% x) == 0) {
-      print("The (XT)X matrix is invertable!")
       return(0)
     }
 
