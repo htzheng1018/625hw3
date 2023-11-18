@@ -4,7 +4,7 @@ Title: Multiple Linear Regression and Description
 Version: 0.1.0
 Author: Haotian Zheng
 Maintainer: Haotian Zheng <htzheng@umich.edu>
-Description: The goal of mypackage is to fit a multiple linear regression using matrix calculations. It contains a virtual dataset with y and x, which are created by random variables. Using this model, we can estimate the coefficients of variables, partial SSE, se(beta_hat), t value, p value, significance of each variables, R square. Meanwhile, this function also contains a Rcpp function, which can calculate the mean of each x variables. Compare with the traditional lm() function, the lrm() function can remains the same effect. Meanwhile, the Rcpp file can also have the same effect with the original R function.
+Description: The goal of mlrmodel is to fit a multiple linear regression using matrix calculations. It contains a virtual dataset with y and x, which are created by random variables. Using this model, we can estimate the coefficients of variables, partial SSE, se(beta_hat), t value, p value, significance of each variables, R square. Meanwhile, this function also contains a Rcpp function, which can calculate the mean of each x variables. Compare with the traditional lm() function, the lrm() function can remains the same effect. Meanwhile, the Rcpp file can also have the same effect with the original R function.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

@@ -10,9 +10,9 @@ coverage](https://codecov.io/gh/htzheng1018/625hw3/branch/main/graph/badge.svg)]
 [![R-CMD-check](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/htzheng1018/625hw3/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of mypackage is to fit a multiple linear regression using
-matrix calculations. It contains a virtual dataset with y and x, which
-are created by random variables. Using this model, we can estimate the
+The goal of mlrmodel is to fit a multiple linear regression using matrix
+calculations. It contains a virtual dataset with y and x, which are
+created by random variables. Using this model, we can estimate the
 coefficients of variables, partial SSE, se(beta_hat), t value, p value,
 significance of each variables, R square. Meanwhile, this function also
 contains a Rcpp function, which can calculate the mean of each x
@@ -71,29 +71,29 @@ call our function
 ``` r
 lrm(y, x)
 #> $mean_x
-#> [1] 0.04487539
+#> [1] -0.1573282
 #> 
 #> $smry
-#>                        beta       partial sse       se beta_hat
-#> intercept  3.95197393629873 -740.543377602071 0.107905242788902
-#> x1         2.91207148337092  449.752629915167 0.100718620960364
-#> x2         2.01569866736167  179.199716454656 0.113475228094789
-#> x3        -1.40355410239345  85.1623161327073 0.115282804898289
-#>                     t value      p value significance
-#> intercept  36.6244849106181 0.000000e+00          ***
-#> x1         28.9129403838532 0.000000e+00          ***
-#> x2         17.7633365555158 0.000000e+00          ***
-#> x3        -12.1748781497098 4.440892e-16             
+#>                        beta      partial sse       se beta_hat
+#> intercept  4.13631739717443  -688.4384476697 0.136926322353665
+#> x1         3.22760089958289 395.024213875671 0.161098015709941
+#> x2         1.96424689106138 156.552529956613 0.143834178250059
+#> x3        -1.63612336674549 97.9812535596508  0.15196069758785
+#>                     t value     p value significance
+#> intercept  30.2083436265146 0.00000e+00          ***
+#> x1         20.0350133759202 0.00000e+00          ***
+#> x2         13.6563292185428 0.00000e+00          ***
+#> x3        -10.7667534613655 3.68594e-14             
 #> 
 #> $corr_table
-#>            x1         x2         x3
-#> x1 1.00000000 0.09047979 0.37572537
-#> x2 0.09047979 1.00000000 0.04181908
-#> x3 0.37572537 0.04181908 1.00000000
+#>              x1          x2           x3
+#> x1  1.000000000 0.005720326 -0.124269181
+#> x2  0.005720326 1.000000000  0.003613378
+#> x3 -0.124269181 0.003613378  1.000000000
 #> 
 #> $R_square
 #>           [,1]
-#> [1,] 0.9643117
+#> [1,] 0.9435237
 ```
 
 Compare with the original function lm().
@@ -106,22 +106,22 @@ lm(y ~ x1 + x2 + x3)
 #> 
 #> Coefficients:
 #> (Intercept)           x1           x2           x3  
-#>       3.952        2.912        2.016       -1.404
+#>       4.136        3.228        1.964       -1.636
 ```
 
 use Rcpp to calculate mean
 
 ``` r
 lrm(y, x, Rcpp = T)
-#> [1] -0.002068075  0.035904456  0.100789805
+#> [1] -0.1097702 -0.1953049 -0.1669094
 ```
 
 Compare with the original function.
 
 ``` r
 colMeans(x)
-#>           x1           x2           x3 
-#> -0.002068075  0.035904456  0.100789805
+#>         x1         x2         x3 
+#> -0.1097702 -0.1953049 -0.1669094
 ```
 
 We use benchmarks to test the efficiency of our new function.
@@ -137,8 +137,8 @@ summary(effct_func)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 myfunc        927µs    993µs      946.     463KB     10.7
-#> 2 lmfunc        740µs    776µs     1279.     124KB     15.0
+#> 1 myfunc        930µs    997µs      956.     463KB     10.7
+#> 2 lmfunc        745µs    785µs     1250.     124KB     15.1
 ```
 
 We use benchmarks to test the efficiency of our Rcpp.
@@ -153,6 +153,6 @@ summary(effct_func_new)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 rcppfunc    21.84µs   24.1µs    38968.    10.6KB     15.6
-#> 2 orginfunc    4.59µs   5.15µs   184733.        0B     37.0
+#> 1 rcppfunc    21.69µs  24.09µs    40605.    10.6KB     16.2
+#> 2 orginfunc    4.67µs   5.28µs   178251.        0B     35.7
 ```
