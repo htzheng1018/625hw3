@@ -5,7 +5,9 @@
 #'It is more efficient.
 #'When there are NAN values, our model just simply remove the NAN value.
 #'
-#'@param x input value, y input value
+#'@param x input value
+#'@param y input value
+#'@param Rcpp input value, "FALSE" by default
 #'
 #'@return the summary of linear regression model of x and y
 #'

@@ -7,7 +7,11 @@
 lrm(y, x, Rcpp = F)
 }
 \arguments{
-\item{x}{input value, y input value}
+\item{y}{input value}
+
+\item{x}{input value}
+
+\item{Rcpp}{input value, "FALSE" by default}
 }
 \value{
 the summary of linear regression model of x and y
