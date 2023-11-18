@@ -1,12 +1,11 @@
 Package: mlrmodel
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Multiple Linear Regression and Description
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Haotian Zheng
+Maintainer: Haotian Zheng <htzheng@umich.edu>
+Description: The goal of mypackage is to fit a multiple linear regression using matrix calculations. It contains a real dataset, which describes depression and its factots, and a virtual dataset, which is created by random variables. Using this model, we can estimate the coefficients of variables, partial SSE, se(beta_hat), t value, p value and significance of each variables. Compare with the traditional lm() function, the lrm() function can remains the same effect. Meanwhile, the Rcpp file can also have the same effect with the original R function.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3

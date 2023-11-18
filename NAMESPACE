@@ -1,3 +1,4 @@
 exportPattern("^[[:alpha:]]+")
 useDynLib(mlrmodel, .registration = TRUE)
 import(Rcpp)
+#importFrom("stats", "complete.cases", "cov", "pt", "sd")
