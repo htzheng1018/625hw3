@@ -11,11 +11,12 @@ coverage](https://codecov.io/gh/htzheng1018/625hw3/branch/main/graph/badge.svg)]
 <!-- badges: end -->
 
 The goal of mypackage is to fit a multiple linear regression using
-matrix calculations. It contains a real dataset, which describes
-depression and its factots, and a virtual dataset, which is created by
-random variables. Using this model, we can estimate the coefficients of
-variables, partial SSE, se(beta_hat), t value, p value and significance
-of each variables.
+matrix calculations. It contains a virtual dataset with y and x, which
+are created by random variables. Using this model, we can estimate the
+coefficients of variables, partial SSE, se(beta_hat), t value, p value,
+significance of each variables, R square. Meanwhile, this function also
+contains a Rcpp function, which can calculate the mean of each x
+variables.
 
 Compare with the traditional lm() function, the lrm() function can
 remains the same effect. Meanwhile, the Rcpp file can also have the same
@@ -70,29 +71,29 @@ call our function
 ``` r
 lrm(y, x)
 #> $mean_x
-#> [1] -0.07685271
+#> [1] 0.04487539
 #> 
 #> $smry
 #>                        beta       partial sse       se beta_hat
-#> intercept  4.22130149395663 -780.253357064103 0.158307760645167
-#> x1         3.04123060118513  472.211826798207 0.143249899260805
-#> x2         1.96688031359417  169.776192582716 0.170283027888993
-#> x3        -1.45103163848862  82.8255675924377 0.175035631612924
+#> intercept  3.95197393629873 -740.543377602071 0.107905242788902
+#> x1         2.91207148337092  449.752629915167 0.100718620960364
+#> x2         2.01569866736167  179.199716454656 0.113475228094789
+#> x3        -1.40355410239345  85.1623161327073 0.115282804898289
 #>                     t value      p value significance
-#> intercept  26.6651582762156 0.000000e+00          ***
-#> x1         21.2302460028134 0.000000e+00          ***
-#> x2         11.5506538612666 3.552714e-15             
-#> x3        -8.28992145837743 1.109417e-10             
+#> intercept  36.6244849106181 0.000000e+00          ***
+#> x1         28.9129403838532 0.000000e+00          ***
+#> x2         17.7633365555158 0.000000e+00          ***
+#> x3        -12.1748781497098 4.440892e-16             
 #> 
 #> $corr_table
-#>              x1          x2           x3
-#> x1  1.000000000 -0.14850992 -0.007224338
-#> x2 -0.148509918  1.00000000 -0.035888049
-#> x3 -0.007224338 -0.03588805  1.000000000
+#>            x1         x2         x3
+#> x1 1.00000000 0.09047979 0.37572537
+#> x2 0.09047979 1.00000000 0.04181908
+#> x3 0.37572537 0.04181908 1.00000000
 #> 
 #> $R_square
 #>           [,1]
-#> [1,] 0.9289465
+#> [1,] 0.9643117
 ```
 
 Compare with the original function lm().
@@ -105,22 +106,22 @@ lm(y ~ x1 + x2 + x3)
 #> 
 #> Coefficients:
 #> (Intercept)           x1           x2           x3  
-#>       4.221        3.041        1.967       -1.451
+#>       3.952        2.912        2.016       -1.404
 ```
 
 use Rcpp to calculate mean
 
 ``` r
 lrm(y, x, Rcpp = T)
-#> [1] -0.19711935 -0.05215594  0.01871715
+#> [1] -0.002068075  0.035904456  0.100789805
 ```
 
 Compare with the original function.
 
 ``` r
 colMeans(x)
-#>          x1          x2          x3 
-#> -0.19711935 -0.05215594  0.01871715
+#>           x1           x2           x3 
+#> -0.002068075  0.035904456  0.100789805
 ```
 
 We use benchmarks to test the efficiency of our new function.
@@ -136,8 +137,8 @@ summary(effct_func)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 myfunc        925µs    997µs      935.     463KB     10.6
-#> 2 lmfunc        739µs    776µs     1275.     124KB     15.0
+#> 1 myfunc        927µs    993µs      946.     463KB     10.7
+#> 2 lmfunc        740µs    776µs     1279.     124KB     15.0
 ```
 
 We use benchmarks to test the efficiency of our Rcpp.
@@ -152,6 +153,6 @@ summary(effct_func_new)
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 rcppfunc    21.67µs   23.9µs    41053.    10.6KB     16.4
-#> 2 orginfunc    4.88µs    5.5µs   175207.        0B     35.0
+#> 1 rcppfunc    21.84µs   24.1µs    38968.    10.6KB     15.6
+#> 2 orginfunc    4.59µs   5.15µs   184733.        0B     37.0
 ```
